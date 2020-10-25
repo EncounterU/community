@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX</title>
+</head>
+<body>
+    <input type="button" value="发送" onclick="send();">
+
+
+    <!--引入jQuery-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script>
+        function send() {
+            $.post(
+                "/community/alpha/ajax",//路径
+                {"name":"黄浩","age":23},//传入的值
+                function (data) {// 回调函数，data就是服务器返回给浏览器的数据
+                    console.log(typeof(data));//打印data类型看看是不是String
+                    console.log(data);//打印内容                    {"msg":"操作成功！","code":0}
+                    data = $.parseJSON(data);//把字符串转化为json格式的对象 字符串转为对象
+                    console.log(typeof(data));
+                    console.log(data);//                            {msg: "操作成功！", code: 0}还是有区别的
+                    console.log(data.code);
+                    console.log(data.msg);
+                    //jquery发送异步请求的格式是固定的，记住吧
+                    //结果就是点击发送按钮，页面路径没有变化（页面其他地方其实也不得变化？），但是内部访问了服务器获取资源
+                }
+            );
+        }
+    </script>
+</body>
+</html>
