@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.community.dao.UserMapper">
+    <!--这里面的字段都是数据库内的字段一致的-->
     <sql id="insertFields">
         username, password, salt, email, type, status, activation_code, header_url, create_time
     </sql>
@@ -10,26 +11,28 @@
     <sql id="selectFields">
         id, username, password, salt, email, type, status, activation_code, header_url, create_time
     </sql>
-
-    <select id="selectById" resultType="User">
+<!--这里 com.hh.community.entity.User只写User也没错，因为配置里配了包名的-->
+    <select id="selectById" resultType="com.hh.community.entity.User">
         select <include refid="selectFields"></include>
         from user
         where id = #{id}
     </select>
 
-    <select id="selectByName" resultType="User">
+    <select id="selectByName" resultType="com.hh.community.entity.User">
         select <include refid="selectFields"></include>
         from user
         where username = #{username}
     </select>
 
-    <select id="selectByEmail" resultType="User">
+    <select id="selectByEmail" resultType="com.hh.community.entity.User">
         select <include refid="selectFields"></include>
         from user
         where email = #{email}
     </select>
-
-    <insert id="insertUser" parameterType="User" keyProperty="id">
+    <!--parameterType：作用申明方法参数类型，这种复杂的不是java自带的类型就要申明下
+        keyProperty：我们insert的时候不会写id，数据库会自动生成id，然后这个功能就是把这两方匹配上，使得实体类也可以得到id的值
+    -->
+    <insert id="insertUser" parameterType="com.hh.community.entity.User" keyProperty="id">
         insert into user (<include refid="insertFields"></include>)
         values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
     </insert>
