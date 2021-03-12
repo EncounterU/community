@@ -24,7 +24,7 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;//如果是方法，先强转下
             Method method = handlerMethod.getMethod();//再获取方法
             //从这个方法上去取注解（LoginRequired.class），有的方法可能没加这个注解，所以又能为空
-            LoginRequired loginRequired = method.getAnnotation(LoginRequired.class);
+            LoginRequired loginRequired = method.getAnnotation(LoginRequired.class);//Annotation:注解，这里就是获取注解的意思
             //这里进行下判断，假如不为空（就代表你加了这个注解），又没有登录（没查询到user），你就不准去访问，只能回到登录页面
             if (loginRequired != null && hostHolder.getUser() == null) {
                 //这里用不了return 的方式重定向（是boolean型），当前方法有response，就利用这个重定向吧；request.getContextPath() 还可以这样获得路径

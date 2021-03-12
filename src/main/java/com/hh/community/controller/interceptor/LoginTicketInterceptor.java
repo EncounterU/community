@@ -33,7 +33,7 @@ public class LoginTicketInterceptor extends HandlerInterceptorAdapter {
                 User user = userService.findUserById(loginTicket.getUserId());//这里我写成getId了，别搞错了
                 //浏览器向服务器发请求，可能有很多请求，服务器都是会建立独立线程的，并发状态下可能会产生冲突，所以要线程隔离
                 //在本次请求中持有用户，当前请求没有结束，这线程就一直在，那这个user就一直在当前线程的map里，当请求响应后才销毁
-                hostHolder.setUser(user);//通过凭证找到用户并把用户暂存存在了这里（当前线程）
+                hostHolder.setUser(user);//通过凭证找到用户并把用户暂存存在了这里（当前线程）,登录成功了这一步都会执行（理解下）
             }
         }
         return true;

@@ -2,9 +2,11 @@ package com.hh.community.controller;
 
 import com.hh.community.annotation.LoginRequired;
 import com.hh.community.entity.User;
+import com.hh.community.service.LikeService;
 import com.hh.community.service.UserService;
 import com.hh.community.util.CommunityUtil;
 import com.hh.community.util.HostHolder;
+import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
+@Api(value = "ceshi",tags = "UserController")
 public class UserController {
     private static Logger logger= LoggerFactory.getLogger(UserController.class);
 
@@ -44,6 +47,9 @@ public class UserController {
 
     @Autowired
     private HostHolder hostHolder;//要知道当前用户是谁，就把这调进来？
+
+    @Autowired
+    private LikeService likeService;
     //设置页面
     @LoginRequired//自定义注解
     @RequestMapping(path = "/setting",method = RequestMethod.GET)
@@ -88,7 +94,12 @@ public class UserController {
     }
 
     @RequestMapping(path = "/header/{fileName}",method = RequestMethod.GET)//这里路径
-    public void getHeader(@PathVariable("fileName") String fileName, HttpServletResponse response){
+    @ApiOperation(value = "获取头像")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "fileName",value = "",required = true,type = "string"),
+            @ApiImplicitParam(name = "id",value = "",required = true,type = "long")
+    })
+    public void getHeader(@PathVariable("fileName") String fileName,Long id, HttpServletResponse response){
         //服务器存放路径（假装服务器和自己的电脑不是同一台）
         fileName=uploadPath+ "/" +fileName;
         //文件后缀（一样的 操作）
@@ -127,5 +138,22 @@ public class UserController {
         else {
             return "redirect:/index";
         }
+    }
+
+    // 个人主页
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在!");
+        }
+
+        // 用户
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+
+        return "/site/profile";
     }
 }
