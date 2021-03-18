@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
+//以CommunityApplication作为测试类,从这个类中加载想要的数据，就是从这里进去，这个类里
 @ContextConfiguration(classes = CommunityApplication.class)
 class CommunityApplicationTests implements ApplicationContextAware {
 
