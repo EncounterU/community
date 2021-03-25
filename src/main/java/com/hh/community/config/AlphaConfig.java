@@ -12,7 +12,7 @@ public class AlphaConfig {
     private Date createTime;
     private int commentCount;
     private double score;
-
+    //第一个提交
     public int getId() {
         return id;
     }
